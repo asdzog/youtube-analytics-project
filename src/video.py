@@ -13,11 +13,18 @@ class Video:
         video_response = youtube.videos().list(part='snippet,statistics,contentDetails,topicDetails',
                                                id=self.video_id
                                                ).execute()
-        self.video_url = f'https://www.youtube.com/watch?v={self.video_id}'
-        self.video_title = video_response['items'][0]['snippet']['title']
-        self.view_count = int(video_response['items'][0]['statistics']['viewCount'])
-        self.like_count = int(video_response['items'][0]['statistics']['likeCount'])
-        self.comment_count = int(video_response['items'][0]['statistics']['commentCount'])
+        try:
+            self.video_url = f'https://www.youtube.com/watch?v={self.video_id}'
+            self.title = video_response['items'][0]['snippet']['title']
+            self.view_count = int(video_response['items'][0]['statistics']['viewCount'])
+            self.like_count = int(video_response['items'][0]['statistics']['likeCount'])
+            self.comment_count = int(video_response['items'][0]['statistics']['commentCount'])
+        except IndexError:
+            self.video_url = None
+            self.title = None
+            self.view_count = None
+            self.like_count = None
+            self.comment_count = None
 
     def __str__(self):
         return f'{self.video_title}'
